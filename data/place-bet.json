@@ -1,0 +1,116 @@
+[
+  {
+    "name": "start-round",
+    "server": {
+      "response": [
+        {
+          "namespace": "/",
+          "event": "DragonTiger",
+          "payload": {
+            "roundId": 2528025,
+            "user": {
+              "UID": "64814040c1fd126343e4dff5",
+              "name": "Woodpecker7309",
+              "red": 2000
+            },
+            "remainingTime": 20
+          }
+        },
+        {
+          "namespace": "/",
+          "event": "DragonTiger",
+          "payload": {
+            "totalBets": {}
+          }
+        }
+      ]
+    },
+    "client": {
+      "actual": "Integration.label('balance')",
+      "expected": "2000"
+    }
+  },
+  {
+    "name": "place-bet",
+    "server": {
+      "waitForRequest": {
+        "namespace": "/",
+        "event": "bet",
+        "payload": {
+          "username": "Woodpecker7309",
+          "betChoice": "dragon",
+          "amount": 1
+        }
+      },
+      "response": [
+        {
+          "namespace": "/",
+          "event": "DragonTiger",
+          "payload": {
+            "totalBets": { "dragon": 1 }
+          }
+        },
+        {
+          "namespace": "/",
+          "event": "DragonTiger",
+          "payload": {
+            "ownBets": {
+              "dragon": 1
+            },
+            "endBet": 1,
+            "betChoice": "dragon",
+            "user": {
+              "red": 1999
+            },
+            "ownChip": {
+              "betChoice": "dragon",
+              "amount": 1
+            }
+          }
+        }
+      ]
+    },
+    "client": {
+      "action": "Integration.click('bet-dragon')",
+      "actual": "Integration.label('balance')",
+      "expected": "1999"
+    }
+  },
+  {
+    "name": "settle",
+    "server": {
+      "response": [
+        {
+          "namespace": "/",
+          "event": "DragonTiger",
+          "payload": {
+            "finish": {
+              "settlementResult": {
+                "dragon": true,
+                "tiger": false,
+                "tie": false
+              },
+              "roundId": 2528025,
+              "winningPlayers": {
+                "64814040c1fd126343e4dff5": {
+                  "rate": 1,
+                  "win": true,
+                  "bet": 1.96,
+                  "winningByChoices": {
+                    "dragon": 1.96,
+                    "tiger": 0,
+                    "tie": 0
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "client": {
+      "actual": "Integration.label('balance')",
+      "expected": "2000.96"
+    }
+  }
+]

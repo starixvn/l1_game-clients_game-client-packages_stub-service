@@ -1,0 +1,13 @@
+docker-build:
+  image: hub.lumigame.com/base/docker:20.10.7
+  tags:
+    - docker
+  stage: build
+  services:
+    - docker:dind
+  before_script:
+    - export CI_REGISTRY_IMAGE=$DOCKER_REG_LOCAL_URL/pentagon/game-clients/stub-service
+    - docker login -u $DOCKER_REG_LOCAL_USERNAME -p $DOCKER_REG_LOCAL_PASSWORD $DOCKER_REG_LOCAL_URL
+  script:
+    - docker build -t $CI_REGISTRY_IMAGE:latest .
+    - docker push $CI_REGISTRY_IMAGE:latest
