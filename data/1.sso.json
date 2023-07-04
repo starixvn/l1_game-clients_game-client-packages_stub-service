@@ -1,0 +1,68 @@
+[
+  {
+    "name": "SSO",
+    "server": {
+      "waitForRequest": {
+        "namespace": "/user/auth/sso?token=x&system=1",
+        "event": "get",
+        "payload": {}
+      },
+      "response": [
+        {
+          "namespace": "/user/auth/sso?token=x&system=1",
+          "event": "get",
+          "payload": {
+            "isAuthenticated": true,
+            "umInfo": null,
+            "username": "username",
+            "language": "vi-VN",
+            "ss": "ss",
+            "system": 1,
+            "memberName": "username",
+            "isUM": false
+          }
+        }
+      ]
+    }
+  },
+  {
+    "name": "Auth",
+    "server": {
+      "waitForRequest": {
+        "namespace": "/user/auth/authorize",
+        "event": "post",
+        "payload": {
+          "session": "ss",
+          "username": "username",
+          "browserUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36"
+        }
+      },
+      "response": [
+        {
+          "namespace": "/user/auth/authorize",
+          "event": "post",
+          "payload": {
+            "authorized": true,
+            "user": {
+              "name": "Conall",
+              "UID": 1234,
+              "avatarId": 83,
+              "currency": "$US",
+              "isSignedInSM": false,
+              "red": 2000,
+              "scoins": 0,
+              "settings": {
+                "theme": ""
+              },
+              "offerGames": [],
+              "fractionalOddsFormat": true,
+              "isDisplayPlayerCurrency": true
+            },
+            "umInfo": null,
+            "isUM": false
+          }
+        }
+      ]
+    }
+  }
+]

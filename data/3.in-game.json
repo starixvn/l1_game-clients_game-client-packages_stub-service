@@ -1,0 +1,101 @@
+[
+  {
+    "name": "In Game",
+    "server": {
+      "waitForRequest": {
+        "namespace": "/user/sedie",
+        "event": "inGame",
+        "payload": null
+      },
+      "response": [
+        {
+          "namespace": "/user/sedie",
+          "event": "SeDie",
+          "payload": {
+            "roundId": 2,
+            "gameConfigs": {
+              "minBet": 1,
+              "maxBet": 2000,
+              "maxBetPerChoices": {
+                "even": 2000,
+                "odd": 2000,
+                "red3": 2000,
+                "white3": 2000,
+                "red4": 600,
+                "white4": 600,
+                "red2": 2000
+              },
+              "chips": ["1"],
+              "stakeLevels": [],
+              "odds": {
+                "even": 1.96,
+                "odd": 1.96,
+                "red3": 3.75,
+                "white3": 3.75,
+                "red4": 14.4,
+                "white4": 14.4,
+                "red2": 2.4
+              },
+              "originalOdds": {
+                "even": 1.96,
+                "odd": 1.96,
+                "red3": 3.75,
+                "white3": 3.75,
+                "red4": 14.4,
+                "white4": 14.4,
+                "red2": 2.4
+              },
+              "enableFreeBet": false,
+              "boostedChoices": []
+            },
+            "roundHistory": [
+              {
+                "roundId": 1,
+                "result": {
+                  "red1": true,
+                  "red2": true,
+                  "red3": false,
+                  "red4": false
+                },
+                "settlementResult": {
+                  "odd": false,
+                  "even": true,
+                  "red2": true,
+                  "red3": false,
+                  "red4": false,
+                  "white3": false,
+                  "white4": false
+                }
+              }
+            ],
+            "ownBets": {},
+            "totalBets": {
+              "even": 10,
+              "odd": 10,
+              "white4": 10,
+              "white3": 10,
+              "red2": 10,
+              "red3": 10
+            },
+            "user": {
+              "name": "Conall",
+              "UID": 1234,
+              "avatarId": 83,
+              "currency": "$US",
+              "red": 2000,
+              "scoins": 0,
+              "type": false,
+              "rate": 1
+            },
+            "resultHash": {
+              "hashValue": "d87158667a1c9ae866476c5b7cd7e640"
+            },
+            "remainingTime": 30,
+            "players": {},
+            "chips": {}
+          }
+        }
+      ]
+    }
+  }
+]

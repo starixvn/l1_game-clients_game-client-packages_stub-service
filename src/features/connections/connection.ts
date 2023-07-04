@@ -1,46 +1,84 @@
 import { Socket } from "socket.io";
 import { IContext } from "../../common";
+import { Event } from "../data-manager";
+import { Queue } from "../data-manager/queue";
+
+export type Publisher = {
+  publish<T>(event: string, payload: T): void;
+};
 
 export type UserConnection = {
   namespace: string;
-  socket: Socket;
+  publisher: Publisher;
+  socket?: Socket;
 };
 
 export class Connection {
-  protected static userSockets: Record<string, UserConnection> = {};
+  protected static userConnections: Record<string, UserConnection> = {};
 
-  static initialize({ socket }: IContext, namespaces: string[]) {
+  protected static receivedEvents = new Queue<Event>();
+
+  static initialize({ socket, express }: IContext, namespaces: string[]) {
     namespaces.forEach((namespace) => {
       socket.of(namespace).on("connection", (userSocket) => {
         const id = userSocket.id;
 
-        console.log(`A user connected ${id}`);
-
-        this.userSockets[id] = { socket: userSocket, namespace };
+        this.userConnections[id] = {
+          socket: userSocket,
+          namespace,
+          publisher: {
+            publish: (event, payload) => userSocket.emit(event, payload),
+          },
+        };
 
         userSocket.on("disconnect", () => {
-          delete this.userSockets[id];
+          delete this.userConnections[id];
+        });
+
+        userSocket.onAny((event, payload) => {
+          this.receivedEvents.enqueue({ event, payload, namespace });
         });
       });
     });
+
+    express.all("*", (request, response) => {
+      const namespace = request.originalUrl;
+      const event = request.method.toLowerCase();
+      const payload = request.body;
+      const id = Date.now();
+
+      this.receivedEvents.enqueue({ event, payload, namespace });
+      this.userConnections[id] = {
+        namespace,
+        publisher: {
+          publish: (_, payload) => {
+            delete this.userConnections[id];
+
+            response.send(payload);
+          },
+        },
+      };
+    });
   }
 
-  static getSockets(namespace: string) {
-    return Object.values(this.userSockets)
-      .filter((user) => user.namespace === namespace)
-      .map((user) => user.socket);
+  static getConnections(namespace: string) {
+    return Object.values(this.userConnections).filter(
+      (user) => user.namespace === namespace
+    );
   }
 
   static emit<T>(namespace: string, event: string, payload: T) {
-    const sockets = this.getSockets(namespace);
+    const connections = this.getConnections(namespace);
 
-    sockets.forEach((socket) => socket.emit(event, payload));
+    connections.forEach((connection) =>
+      connection.publisher.publish(event, payload)
+    );
   }
 
   static async waitConnection(namespace: string) {
     return new Promise((resolve) => {
       setInterval(() => {
-        if (this.getSockets(namespace).length !== 0) {
+        if (this.getConnections(namespace).length !== 0) {
           resolve(true);
         }
       });
@@ -52,20 +90,22 @@ export class Connection {
     event: string,
     predicate: (data: T) => boolean
   ) {
-    await this.waitConnection(namespace);
-
-    const sockets = this.getSockets(namespace);
-
     return new Promise((resolve) => {
-      sockets.forEach((socket) =>
-        socket.on(event, (payload) => {
-          if (predicate(payload)) {
-            sockets.forEach((socket) => socket.removeAllListeners(event));
+      let interval = setInterval(() => {
+        const receivedEvent = this.receivedEvents.dequeue();
 
-            resolve(true);
-          }
-        })
-      );
+        if (
+          receivedEvent?.namespace === namespace &&
+          receivedEvent?.event === event &&
+          predicate(receivedEvent.payload)
+        ) {
+          clearInterval(interval);
+
+          resolve(true);
+        } else {
+          this.receivedEvents.enqueue(receivedEvent);
+        }
+      }, 1000);
     });
   }
 }

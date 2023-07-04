@@ -1,0 +1,40 @@
+[
+  {
+    "name": "Sign In",
+    "server": {
+      "waitForRequest": {
+        "namespace": "/user/sedie",
+        "event": "signin",
+        "payload": {
+          "ss": "ss",
+          "username": "username",
+          "system": 1
+        }
+      },
+      "response": [
+        {
+          "namespace": "/user/sedie",
+          "event": "message",
+          "payload": {
+            "userStakeLevel": {
+              "minBet": 1,
+              "maxBet": 3000
+            }
+          }
+        },
+        {
+          "namespace": "/user/sedie",
+          "event": "signedIn",
+          "payload": {}
+        },
+        {
+          "namespace": "/user/sedie",
+          "event": "message",
+          "payload": {
+            "toGame": "SeDie"
+          }
+        }
+      ]
+    }
+  }
+]

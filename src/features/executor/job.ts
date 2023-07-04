@@ -1,3 +1,4 @@
+import { debug } from "../../common";
 import { Connection } from "../connections";
 import { Event, Manager } from "../data-manager";
 
@@ -28,7 +29,7 @@ export function startJob() {
       return;
     }
 
-    job.data.name && console.debug(`DEBUG: Running ${job.data.name}`);
+    debug(job.data.name, "running");
 
     job.status = JobStatus.RUNNING;
 
@@ -42,7 +43,14 @@ export function startJob() {
       const { waitForRequest } = server;
       const { namespace, event } = waitForRequest;
       const isMatchPayload = (payload: unknown) =>
+        payload === waitForRequest.payload ||
         JSON.stringify(payload) === JSON.stringify(waitForRequest.payload);
+
+      debug(
+        job.data.name,
+        "waiting for request\n",
+        JSON.stringify(waitForRequest, null, 4)
+      );
 
       await Connection.waitUntil(namespace, event, isMatchPayload);
       await sendResponse(server.response);
@@ -51,7 +59,7 @@ export function startJob() {
     }
 
     if (job.status === JobStatus.ENDED) {
-      job.data.name && console.debug(`DEBUG: Ended ${job.data.name}`);
+      debug(job.data.name, "ended");
 
       job.data = Manager.getTestCase();
       job.status = JobStatus.STARTING;

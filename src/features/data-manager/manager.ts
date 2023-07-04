@@ -1,3 +1,4 @@
+import { debug } from "../../common";
 import { RawData, loadData } from "./loader";
 import { Queue } from "./queue";
 import { TestCase, rawToTestCases } from "./test-case";
@@ -20,7 +21,8 @@ export class Manager {
       const raw = this.rawQueue.dequeue();
 
       if (raw) {
-        console.debug(`DEBUG: Testing ${raw.name}`);
+        debug(raw.name);
+
         const testSuite = rawToTestCases(raw);
 
         testSuite.forEach((test) => this.testCaseQueue.enqueue(test));

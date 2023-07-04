@@ -3,7 +3,7 @@ import { RawData } from "./loader";
 export type Event = {
   namespace: string;
   event: string;
-  payload: unknown;
+  payload: any;
 };
 
 export type TestCase = {
