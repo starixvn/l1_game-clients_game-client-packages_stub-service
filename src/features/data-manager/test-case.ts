@@ -8,9 +8,10 @@ export type Event = {
 
 export type TestCase = {
   name?: string;
-  server: {
+  server?: {
     response: Event[];
-    waitForRequest: Event;
+    waitForRequest?: Event;
+    delay?: number;
   };
   client: unknown;
 };

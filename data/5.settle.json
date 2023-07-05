@@ -1,0 +1,65 @@
+{
+  "name": "settle",
+  "server": {
+    "delay": 10000,
+    "response": [
+      {
+        "namespace": "/user/sedie",
+        "event": "SeDie",
+        "payload": {
+          "status": {
+            "winningByChoices": {
+              "odd": 0,
+              "even": 1.96,
+              "red2": 0,
+              "red3": 0,
+              "red4": 0,
+              "white3": 0,
+              "white4": 0
+            },
+            "win": true,
+            "bet": 1.96
+          }
+        }
+      },
+      {
+        "namespace": "/user/sedie",
+        "event": "SeDie",
+        "payload": {
+          "finish": {
+            "result": {
+              "red1": false,
+              "red2": true,
+              "red3": true,
+              "red4": false
+            },
+            "settlementResult": {
+              "odd": false,
+              "even": true,
+              "red2": true,
+              "red3": false,
+              "red4": false,
+              "white3": false,
+              "white4": false
+            },
+            "roundId": 2,
+            "winningPlayers": {}
+          },
+          "resultHash": {
+            "rawValue": "{🔴🔴⚪⚪}_{#254343099332430efb626621c6f0}",
+            "extraInfos": {
+              "red1": false,
+              "red2": false,
+              "red3": true,
+              "red4": true
+            }
+          }
+        }
+      }
+    ]
+  },
+  "client": {
+    "actual": "Integration.label('balance')",
+    "expected": "2000.96"
+  }
+}

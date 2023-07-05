@@ -1,109 +1,45 @@
-[
-  {
-    "name": "Place Bet",
-    "server": {
-      "waitForRequest": {
+{
+  "name": "Place Bet",
+  "server": {
+    "waitForRequest": {
+      "namespace": "/user/sedie",
+      "event": "bet",
+      "payload": {
+        "m": 1,
+        "username": "Conall",
+        "betChoice": "even",
+        "amount": 1,
+        "freeBet": false
+      }
+    },
+    "response": [
+      {
         "namespace": "/user/sedie",
-        "event": "bet",
+        "event": "SeDie",
         "payload": {
-          "m": 1,
-          "username": "Conall",
+          "ownBets": {
+            "even": 1
+          },
+          "endBet": 1,
           "betChoice": "even",
-          "amount": 1,
-          "freeBet": false
-        }
-      },
-      "response": [
-        {
-          "namespace": "/user/sedie",
-          "event": "SeDie",
-          "payload": {
-            "ownBets": {
-              "even": 1
-            },
-            "endBet": 1,
+          "freeBet": false,
+          "user": {
+            "red": 1999,
+            "scoins": 0,
+            "minBet": 1,
+            "maxBet": 3000
+          },
+          "ownChip": {
             "betChoice": "even",
-            "freeBet": false,
-            "user": {
-              "red": 1999,
-              "scoins": 0,
-              "minBet": 1,
-              "maxBet": 3000
-            },
-            "ownChip": {
-              "betChoice": "even",
-              "amount": 1
-            }
+            "amount": 1
           }
         }
-      ]
-    },
-    "client": {
-      "action": "Integration.click('bet-even')",
-      "actual": "Integration.label('balance')",
-      "expected": "1999"
-    }
+      }
+    ]
   },
-  {
-    "name": "settle",
-    "server": {
-      "response": [
-        {
-          "namespace": "/user/sedie",
-          "event": "SeDie",
-          "payload": {
-            "winningByChoices": {
-              "odd": 0,
-              "even": 1.96,
-              "red2": 0,
-              "red3": 0,
-              "red4": 0,
-              "white3": 0,
-              "white4": 0
-            },
-            "win": true,
-            "bet": 1.96
-          }
-        },
-        {
-          "namespace": "/user/sedie",
-          "event": "SeDie",
-          "payload": {
-            "finish": {
-              "result": {
-                "red1": false,
-                "red2": true,
-                "red3": true,
-                "red4": false
-              },
-              "settlementResult": {
-                "odd": false,
-                "even": true,
-                "red2": true,
-                "red3": false,
-                "red4": false,
-                "white3": false,
-                "white4": false
-              },
-              "roundId": 2,
-              "winningPlayers": {}
-            },
-            "resultHash": {
-              "rawValue": "{🔴🔴⚪⚪}_{#254343099332430efb626621c6f0}",
-              "extraInfos": {
-                "red1": false,
-                "red2": false,
-                "red3": true,
-                "red4": true
-              }
-            }
-          }
-        }
-      ]
-    },
-    "client": {
-      "actual": "Integration.label('balance')",
-      "expected": "2000.96"
-    }
+  "client": {
+    "action": "Integration.click('bet-even')",
+    "actual": "Integration.label('balance')",
+    "expected": "1999"
   }
-]
+}

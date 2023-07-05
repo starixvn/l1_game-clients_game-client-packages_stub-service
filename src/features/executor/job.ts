@@ -1,6 +1,6 @@
 import { debug } from "../../common";
 import { Connection } from "../connections";
-import { Event, Manager } from "../data-manager";
+import { Event, Manager, TestCase } from "../data-manager";
 
 enum JobStatus {
   STARTING = 1,
@@ -16,6 +16,20 @@ export async function sendResponse(events: Event[]) {
       Connection.emit(namespace, event, payload);
     })
   );
+}
+
+export async function sleep(time: number) {
+  return new Promise((resolve) => {
+    setTimeout(() => resolve(true), time);
+  });
+}
+
+export async function delay(test: TestCase) {
+  if (test.server?.delay) {
+    debug(test.name, `delay after ${test.server?.delay}ms`);
+
+    await sleep(test.server?.delay);
+  }
 }
 
 export function startJob() {
@@ -36,6 +50,7 @@ export function startJob() {
     const { server } = job.data;
 
     if (!server.waitForRequest) {
+      await delay(job.data);
       await sendResponse(server.response);
 
       job.status = JobStatus.ENDED;
@@ -53,6 +68,7 @@ export function startJob() {
       );
 
       await Connection.waitUntil(namespace, event, isMatchPayload);
+      await delay(job.data);
       await sendResponse(server.response);
 
       job.status = JobStatus.ENDED;
