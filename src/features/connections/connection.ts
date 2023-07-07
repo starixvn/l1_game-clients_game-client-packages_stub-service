@@ -21,6 +21,8 @@ export class Connection {
   static initialize({ socket, express }: IContext, namespaces: string[]) {
     namespaces.forEach((namespace) => {
       socket.of(namespace).on("connection", (userSocket) => {
+        console.log(userSocket.handshake.headers["user-agent"]);
+
         const id = userSocket.id;
 
         this.userConnections[id] = {
@@ -42,6 +44,8 @@ export class Connection {
     });
 
     express.all("*", (request, response) => {
+      console.log(request.headers["user-agent"]);
+
       const namespace = request.originalUrl;
       const event = request.method.toLowerCase();
       const payload = request.body;

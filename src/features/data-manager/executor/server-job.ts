@@ -1,12 +1,7 @@
-import { debug } from "../../common";
-import { Connection } from "../connections";
-import { Event, Manager, TestCase } from "../data-manager";
-
-enum JobStatus {
-  STARTING = 1,
-  RUNNING,
-  ENDED,
-}
+import { Event, Manager } from "..";
+import { Connection } from "../../connections";
+import { debug } from "../debug";
+import { JobStatus, delay } from "./utils";
 
 export async function sendResponse(events: Event[]) {
   await Promise.all(
@@ -18,34 +13,26 @@ export async function sendResponse(events: Event[]) {
   );
 }
 
-export async function sleep(time: number) {
-  return new Promise((resolve) => {
-    setTimeout(() => resolve(true), time);
-  });
-}
-
-export async function delay(test: TestCase) {
-  if (test.server?.delay) {
-    debug(test.name, `delay after ${test.server?.delay}ms`);
-
-    await sleep(test.server?.delay);
-  }
-}
-
-export function startJob() {
+export function startServerJob() {
   const job = {
     status: JobStatus.STARTING,
     data: Manager.getTestCase(),
   };
 
   setInterval(async () => {
-    if (!job.data || job.status === JobStatus.RUNNING) {
+    if (!job.data || !job.data.server) {
+      job.data = Manager.getTestCase();
+      job.status = JobStatus.STARTING;
+
       return;
     }
 
-    debug(job.data.name, "running");
+    if (job.status === JobStatus.RUNNING) {
+      return;
+    }
 
     job.status = JobStatus.RUNNING;
+    debug(job.data.name, "running");
 
     const { server } = job.data;
 

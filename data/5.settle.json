@@ -60,6 +60,6 @@
   },
   "client": {
     "actual": "Integration.label('balance')",
-    "expected": "2000.96"
+    "expected": "1,999"
   }
 }

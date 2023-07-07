@@ -38,8 +38,10 @@
     ]
   },
   "client": {
+    "delayForAssert": 3000,
+    "delayForAction": 5000,
     "action": "Integration.click('bet-even')",
     "actual": "Integration.label('balance')",
-    "expected": "1999"
+    "expected": "1,999"
   }
 }

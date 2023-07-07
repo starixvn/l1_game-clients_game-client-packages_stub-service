@@ -96,6 +96,11 @@
           }
         }
       ]
+    },
+    "client": {
+      "delayForAssert": 10000,
+      "actual": "Integration.label('balance')",
+      "expected": "2,000"
     }
   }
 ]

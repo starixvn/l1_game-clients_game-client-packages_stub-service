@@ -1,4 +1,4 @@
-import { debug } from "../../common";
+import { debug } from "./debug";
 import { RawData, loadData } from "./loader";
 import { Queue } from "./queue";
 import { TestCase, rawToTestCases } from "./test-case";
@@ -30,5 +30,9 @@ export class Manager {
     }
 
     return this.testCaseQueue.dequeue();
+  }
+
+  public static done(): boolean {
+    return this.testCaseQueue.empty() && this.rawQueue.empty();
   }
 }

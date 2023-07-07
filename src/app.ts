@@ -6,7 +6,7 @@ import { startup } from "./startup";
 const dataDirectory = getValue("DATA_DIR", "data");
 const corsOrigin = getValue("CORS_ORIGIN", "*");
 const port = getValue("PORT", "8080");
-const namespaces = getValue("NAMESPACES", "/").split(",");
+const namespaces = getValue("NAMESPACES", "/,/user/sedie").split(",");
 
 const corsConfigs = { origin: corsOrigin };
 

@@ -13,7 +13,13 @@ export type TestCase = {
     waitForRequest?: Event;
     delay?: number;
   };
-  client: unknown;
+  client: {
+    delayForAssert?: number;
+    delayForAction?: number;
+    action?: string;
+    actual?: string;
+    expected?: unknown;
+  };
 };
 
 export function rawToTestCases(raw: RawData): TestCase[] {
