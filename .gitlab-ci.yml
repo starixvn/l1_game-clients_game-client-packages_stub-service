@@ -35,30 +35,32 @@ integration-test:
   before_script:
     - docker rm -f -v client-$CI_COMMIT_SHORT_SHA service-$CI_COMMIT_SHORT_SHA
     - |
+      $CLIENT_PORT=$CI_JOB_ID % 64551 + 1024
       $CLIENT_CONFIGS = @"
       window.envConfig = {
         isDev: false,
         systemType: "SC1",
         ssl: false,
         serverDomainMapper: {
-          localhost: "localhost:8080",
+          localhost: "localhost:$($CLIENT_PORT + 1)",
         },
         subDomain: "",
         env: "LOCAL",
         subGuideDomain: "l1-guide",
         enableMsgpackParserAllGames: false,
         enableMsgpackParserOnNotification: false,
-        userServiceUrlDev: "http://localhost:8080/",
+        userServiceUrlDev: "http://localhost:$($CLIENT_PORT + 1)/",
         proxyRoute: "",
         wsPath: "sedie",
       };
       "@
-      $PORT=$CI_JOB_ID % 64551 + 1024
+
+      $CLIENT_URL="http://localhost:$CLIENT_PORT/?token=x&lang=vi-VN"
     - echo $CLIENT_CONFIGS > c.js
     - cat c.js
     - echo $PORT
-    - docker run -d -p 9999:80 -v .:/usr/share/nginx/html/c --name client-$CI_COMMIT_SHORT_SHA hub.lumigame.com/pentagon/l1_game_client_base:LOCAL_3-latest
-    - docker run -d -p 8080:8080 --name service-$CI_COMMIT_SHORT_SHA hub.lumigame.com/pentagon/game-clients/stub-service
+    - docker run -d -p $CLIENT_PORT:80 -v .:/usr/share/nginx/html/c --name client-$CI_COMMIT_SHORT_SHA hub.lumigame.com/pentagon/l1_game_client_base:LOCAL_3-latest
+    - docker run -d -p $($CLIENT_PORT + 1):8080 --name service-$CI_COMMIT_SHORT_SHA hub.lumigame.com/pentagon/game-clients/stub-service
   script:
     - npm install
     - npm test
@@ -71,4 +73,3 @@ integration-test:
 variables:
   NAMESPACES: "/,/user/sedie"
   DATA_DIR: /build/data
-  CLIENT_URL: "http://localhost:9999/?token=x&lang=vi-VN"
