@@ -49,6 +49,7 @@ integration-test:
     - npm test
   tags:
     - docker
+    - windows
 
 variables:
   DATA_DIR: /build/data
