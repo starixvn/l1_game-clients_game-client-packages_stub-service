@@ -33,7 +33,7 @@
 
 integration-test:
   before_script:
-    - docker rm -f -v client service
+    - docker rm -f -v client-$CI_COMMIT_SHORT_SHA service-$CI_COMMIT_SHORT_SHA
     - |
       $CLIENT_CONFIGS = @"
       window.envConfig = {
@@ -53,9 +53,10 @@ integration-test:
         wsPath: "sedie",
       };
       "@
-
+      $PORT=$CI_JOB_ID % 64551 + 1024
     - echo $CLIENT_CONFIGS > c.js
     - cat c.js
+    - echo $PORT
     - docker run -d -p 9999:80 -v .:/usr/share/nginx/html/c --name client-$CI_COMMIT_SHORT_SHA hub.lumigame.com/pentagon/l1_game_client_base:LOCAL_3-latest
     - docker run -d -p 8080:8080 --name service-$CI_COMMIT_SHORT_SHA hub.lumigame.com/pentagon/game-clients/stub-service
   script:
