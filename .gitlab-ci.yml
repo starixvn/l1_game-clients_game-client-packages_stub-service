@@ -47,6 +47,8 @@ integration-test:
   script:
     - npm install
     - npm test
+  tags:
+    - docker
 
 variables:
   DATA_DIR: /build/data
