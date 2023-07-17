@@ -34,7 +34,7 @@
 integration-test:
   before_script:
     - echo $CLIENT_CONFIGS > client.js
-    - docker run -d -p 9999:80 -v client.js:/usr/share/nginx/html/c/c.js --name client hub.lumigame.com/pentagon/l1_game_client_base:LOCAL_3-latest
+    - docker run -d -p 9999:80 -v ./client.js:/usr/share/nginx/html/c/c.js --name client hub.lumigame.com/pentagon/l1_game_client_base:LOCAL_3-latest
     - docker run -d -p 8080:8080 --name service hub.lumigame.com/pentagon/game-clients/stub-service
   script:
     - npm install
