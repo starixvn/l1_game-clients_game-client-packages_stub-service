@@ -34,14 +34,35 @@
 integration-test:
   before_script:
     - docker rm -f -v client service
+    - |
+      $CLIENT_CONFIGS = @"
+      window.envConfig = {
+        isDev: false,
+        systemType: "SC1",
+        ssl: false,
+        serverDomainMapper: {
+          localhost: "localhost:8080",
+        },
+        subDomain: "",
+        env: "LOCAL",
+        subGuideDomain: "l1-guide",
+        enableMsgpackParserAllGames: false,
+        enableMsgpackParserOnNotification: false,
+        userServiceUrlDev: "http://localhost:8080/",
+        proxyRoute: "",
+        wsPath: "sedie",
+      };
+      "@
+
     - echo $CLIENT_CONFIGS > c.js
-    - docker run -d -p 9999:80 -v .:/usr/share/nginx/html/c --name client hub.lumigame.com/pentagon/l1_game_client_base:LOCAL_3-latest
-    - docker run -d -p 8080:8080 --name service hub.lumigame.com/pentagon/game-clients/stub-service
+    - cat c.js
+    - docker run -d -p 9999:80 -v .:/usr/share/nginx/html/c --name client-$CI_COMMIT_SHORT_SHA hub.lumigame.com/pentagon/l1_game_client_base:LOCAL_3-latest
+    - docker run -d -p 8080:8080 --name service-$CI_COMMIT_SHORT_SHA hub.lumigame.com/pentagon/game-clients/stub-service
   script:
     - npm install
     - npm test
   after_script:
-    - docker rm -f -v client service
+    - docker rm -f -v client-$CI_COMMIT_SHORT_SHA service-$CI_COMMIT_SHORT_SHA
   tags:
     - docker
     - windows
@@ -50,20 +71,3 @@ variables:
   NAMESPACES: "/,/user/sedie"
   DATA_DIR: /build/data
   CLIENT_URL: "http://localhost:9999/?token=x&lang=vi-VN"
-  CLIENT_CONFIGS: |-
-    window.envConfig = {
-      isDev: false,
-      systemType: "SC1",
-      ssl: false,
-      serverDomainMapper: {
-        localhost: "localhost:8080",
-      },
-      subDomain: "",
-      env: "LOCAL",
-      subGuideDomain: "l1-guide",
-      enableMsgpackParserAllGames: false,
-      enableMsgpackParserOnNotification: false,
-      userServiceUrlDev: "http://service:8080/",
-      proxyRoute: "",
-      wsPath: "sedie",
-    };
