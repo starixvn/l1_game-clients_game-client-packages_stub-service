@@ -36,12 +36,12 @@ integration-test:
   services:
     - name: hub.lumigame.com/pentagon/l1_game_client_base:LOCAL_3-latest
       alias: client
-      entrypoint:
-        [
-          "/bin/sh",
-          "-c",
-          'echo "${CLIENT_CONFIGS}" > /usr/share/nginx/html/c/c.js && nginx -g daemon off',
-        ]
+      # entrypoint:
+      #   [
+      #     "/bin/sh",
+      #     "-c",
+      #     'echo "${CLIENT_CONFIGS}" > /usr/share/nginx/html/c/c.js && nginx -g daemon off',
+      #   ]
     - name: hub.lumigame.com/pentagon/game-clients/stub-service
       alias: service
   script:
