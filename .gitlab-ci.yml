@@ -33,8 +33,8 @@
 
 integration-test:
   before_script:
-    - $SERVICE_IMAGE=$DOCKER_REG_LOCAL_URL/pentagon/game-clients/stub-service
-    - $CLIENT_IMAGE=hub.lumigame.com/pentagon/l1_game_client_base:LOCAL_3-latest
+    - $SERVICE_IMAGE="$DOCKER_REG_LOCAL_URL/pentagon/game-clients/stub-service"
+    - $CLIENT_IMAGE="$DOCKER_REG_LOCAL_URL/pentagon/l1_game_client_base:LOCAL_3-latest"
     - docker pull $SERVICE_IMAGE
     - docker pull $CLIENT_IMAGE
     - docker rm -f -v client-$CI_COMMIT_SHORT_SHA service-$CI_COMMIT_SHORT_SHA
