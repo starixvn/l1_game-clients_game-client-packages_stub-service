@@ -52,6 +52,7 @@ integration-test:
     - windows
 
 variables:
+  CI_DEBUG_SERVICES: "true"
   DATA_DIR: /build/data
   CLIENT_URL: "http://client/?token=x&lang=vi-VN"
   CLIENT_CONFIGS: |-
