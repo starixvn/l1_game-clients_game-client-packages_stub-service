@@ -33,6 +33,10 @@
 
 integration-test:
   before_script:
+    - $SERVICE_IMAGE=$DOCKER_REG_LOCAL_URL/pentagon/game-clients/stub-service
+    - $CLIENT_IMAGE=hub.lumigame.com/pentagon/l1_game_client_base:LOCAL_3-latest
+    - docker pull $SERVICE_IMAGE
+    - docker pull $CLIENT_IMAGE
     - docker rm -f -v client-$CI_COMMIT_SHORT_SHA service-$CI_COMMIT_SHORT_SHA
     - |
       $CLIENT_PORT=$CI_JOB_ID % 64551 + 1024
@@ -58,8 +62,8 @@ integration-test:
       $CLIENT_URL="http://localhost:$CLIENT_PORT/?token=x&lang=vi-VN"
       echo $CLIENT_CONFIGS > c.js
       cat c.js
-      docker run -d -p "$CLIENT_PORT:80" -v .:/usr/share/nginx/html/c --name client-$CI_COMMIT_SHORT_SHA hub.lumigame.com/pentagon/l1_game_client_base:LOCAL_3-latest
-      docker run -d -p "$($CLIENT_PORT + 1):8080" --name service-$CI_COMMIT_SHORT_SHA hub.lumigame.com/pentagon/game-clients/stub-service
+      docker run -d -p "$CLIENT_PORT:80" -v .:/usr/share/nginx/html/c --name client-$CI_COMMIT_SHORT_SHA  $CLIENT_IMAGE
+      docker run -d -p "$($CLIENT_PORT + 1):8080" --name service-$CI_COMMIT_SHORT_SHA $SERVICE_IMAGE
   script:
     - echo $CLIENT_URL
     - npm install
