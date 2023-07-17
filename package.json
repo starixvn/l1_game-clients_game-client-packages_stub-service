@@ -9,6 +9,7 @@
   "scripts": {
     "build": "tsc",
     "start": "nodemon ./src/app.ts",
+    "test": "playwright test",
     "test:ui": "playwright test --ui"
   },
   "dependencies": {

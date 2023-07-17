@@ -20,7 +20,9 @@ test.beforeEach(async ({ page }) => {
     return page.evaluate((code) => eval(code), code);
   }
 
-  await page.goto("http://localhost:9999/?token=x&lang=vi-VN");
+  await page.goto(
+    process.env.CLIENT_URL || "http://localhost:9999/?token=x&lang=vi-VN"
+  );
   await Manager.initialize("data");
 
   startJob({

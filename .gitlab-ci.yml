@@ -30,3 +30,41 @@ docker-build:
     - |
       kaniko_config_file=/kaniko/.docker/config.json
       rm $kaniko_config_file
+
+integration-test:
+  image: node:lts-alpine
+  services:
+    - name: hub.lumigame.com/pentagon/l1_game_client_base:LOCAL_3-latest
+      alias: client
+      entrypoint:
+        [
+          "/bin/sh",
+          "-c",
+          'echo "${CLIENT_CONFIGS}" > /usr/share/nginx/html/c/c.js && nginx -g daemon off',
+        ]
+    - name: hub.lumigame.com/pentagon/game-clients/stub-service
+      alias: service
+  script:
+    - npm install
+    - npm test
+
+variables:
+  DATA_DIR: /build/data
+  CLIENT_URL: "http://client/?token=x&lang=vi-VN"
+  CLIENT_CONFIGS: |-
+    window.envConfig = {
+      isDev: false,
+      systemType: "SC1",
+      ssl: false,
+      serverDomainMapper: {
+        client: "service:8080",
+      },
+      subDomain: "",
+      env: "LOCAL",
+      subGuideDomain: "l1-guide",
+      enableMsgpackParserAllGames: false,
+      enableMsgpackParserOnNotification: false,
+      userServiceUrlDev: "http://service:8080/",
+      proxyRoute: "",
+      wsPath: "sedie",
+    };
