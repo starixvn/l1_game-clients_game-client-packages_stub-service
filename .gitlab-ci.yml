@@ -34,6 +34,7 @@
 integration-test:
   image: node:lts-alpine
   services:
+    - mysql
     - name: hub.lumigame.com/pentagon/l1_game_client_base:LOCAL_3-latest
       alias: client
       # entrypoint:
