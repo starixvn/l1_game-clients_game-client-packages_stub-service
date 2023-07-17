@@ -47,7 +47,7 @@ integration-test:
     - windows
 
 variables:
-  CI_DEBUG_SERVICES: "true"
+  NAMESPACES: "/,/user/sedie"
   DATA_DIR: /build/data
   CLIENT_URL: "http://localhost:9999/?token=x&lang=vi-VN"
   CLIENT_CONFIGS: |-
