@@ -33,7 +33,8 @@
 
 integration-test:
   before_script:
-    - docker run -d -p 9999:80 --name client hub.lumigame.com/pentagon/l1_game_client_base:LOCAL_3-latest
+    - echo $CLIENT_CONFIGS > client.js
+    - docker run -d -p 9999:80 -v client.js:/usr/share/nginx/html/c/c.js --name client hub.lumigame.com/pentagon/l1_game_client_base:LOCAL_3-latest
     - docker run -d -p 8080:8080 --name service hub.lumigame.com/pentagon/game-clients/stub-service
   script:
     - npm install
@@ -47,14 +48,14 @@ integration-test:
 variables:
   CI_DEBUG_SERVICES: "true"
   DATA_DIR: /build/data
-  CLIENT_URL: "http://client/?token=x&lang=vi-VN"
+  CLIENT_URL: "http://localhost:9999/?token=x&lang=vi-VN"
   CLIENT_CONFIGS: |-
     window.envConfig = {
       isDev: false,
       systemType: "SC1",
       ssl: false,
       serverDomainMapper: {
-        client: "service:8080",
+        localhost: "localhost:8080",
       },
       subDomain: "",
       env: "LOCAL",
