@@ -32,22 +32,14 @@
       rm $kaniko_config_file
 
 integration-test:
-  image: node:lts-alpine
-  services:
-    - mysql
-    - name: hub.lumigame.com/pentagon/l1_game_client_base:LOCAL_3-latest
-      alias: client
-      # entrypoint:
-      #   [
-      #     "/bin/sh",
-      #     "-c",
-      #     'echo "${CLIENT_CONFIGS}" > /usr/share/nginx/html/c/c.js && nginx -g daemon off',
-      #   ]
-    - name: hub.lumigame.com/pentagon/game-clients/stub-service
-      alias: service
+  before_script:
+    - docker run -d -p 9999:80 --name client hub.lumigame.com/pentagon/l1_game_client_base:LOCAL_3-latest
+    - docker run -d -p 8080:8080 --name service hub.lumigame.com/pentagon/game-clients/stub-service
   script:
     - npm install
     - npm test
+  after_script:
+    - docker rm -f -v client service
   tags:
     - docker
     - windows
