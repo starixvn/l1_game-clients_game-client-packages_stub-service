@@ -63,7 +63,7 @@ integration-test:
       echo $CLIENT_CONFIGS > c.js
       cat c.js
     - docker run -d -p "$($CLIENT_PORT + 0):80" -v .:/usr/share/nginx/html/c --name client-$CI_COMMIT_SHORT_SHA  $CLIENT_IMAGE
-    - docker run -d -p "$($CLIENT_PORT + 1):8080" -v data:/builds/tests/integration-tests --env NAMESPACES="/,/user/sedie" --name service-$CI_COMMIT_SHORT_SHA $SERVICE_IMAGE
+    - docker run -d -p "$($CLIENT_PORT + 1):8080" -v ./data:/builds/tests/integration-tests --env NAMESPACES="/,/user/sedie" --name service-$CI_COMMIT_SHORT_SHA $SERVICE_IMAGE
   script:
     - $env:CLIENT_URL = $CLIENT_URL
     - npm install
