@@ -1,4 +1,4 @@
-.docker-build:
+docker-build:
   image:
     name: gcr.io/kaniko-project/executor:debug
     entrypoint: [""]
@@ -33,7 +33,7 @@
 
 integration-test:
   before_script:
-    - $SERVICE_IMAGE="hub.lumigame.com/pentagon/pentagon/game-clients/stub-service"
+    - $SERVICE_IMAGE="hub.lumigame.com/pentagon/game-clients/stub-service"
     - $CLIENT_IMAGE="hub.lumigame.com/pentagon/l1_game_client_base:LOCAL_3-latest"
     - docker pull $SERVICE_IMAGE
     - docker pull $CLIENT_IMAGE
