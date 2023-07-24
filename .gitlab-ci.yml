@@ -6,7 +6,7 @@ docker-build:
     - docker
   stage: build
   before_script:
-    - export CI_REGISTRY_IMAGE=$DOCKER_REG_LOCAL_URL/pentagon/game-clients/stub-service
+    - export CI_REGISTRY_IMAGE=$DOCKER_REG_LOCAL_URL/pentagon/game-clients/stub-service:LOCAL
     - |
       kaniko_config_file=/kaniko/.docker/config.json
       if [[ ! -f "$kaniko_config_file" ]]; then
