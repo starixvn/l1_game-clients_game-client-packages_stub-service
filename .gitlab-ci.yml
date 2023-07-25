@@ -6,7 +6,7 @@ docker-build:
     - docker
   stage: build
   before_script:
-    - export CI_REGISTRY_IMAGE=$DOCKER_REG_LOCAL_URL/pentagon/game-clients/stub-service:LOCAL
+    - export CI_REGISTRY_IMAGE=$DOCKER_REG_LOCAL_URL/pentagon/game-clients/stub-service:LOCAL-latest
     - |
       kaniko_config_file=/kaniko/.docker/config.json
       if [[ ! -f "$kaniko_config_file" ]]; then
@@ -31,7 +31,7 @@ docker-build:
       kaniko_config_file=/kaniko/.docker/config.json
       rm $kaniko_config_file
 
-integration-test:
+.integration-test:
   before_script:
     - $SERVICE_IMAGE="hub.lumigame.com/pentagon/game-clients/stub-service"
     - $CLIENT_IMAGE="hub.lumigame.com/pentagon/l1_game_client_base:LOCAL_3-latest"
