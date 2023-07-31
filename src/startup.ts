@@ -1,6 +1,6 @@
+import { Connection, Manager, startJob } from "@sg/cocos-integration-testing";
 import { createServer } from "http";
 import { IContext } from "./common";
-import { Connection, Manager, startJob } from "./features";
 import {
   CreateExpressServerOptions,
   CreateSocketServerOptions,
@@ -25,7 +25,7 @@ export async function startup(options: StartupOptions) {
   await Manager.initialize(options.dataDirectory);
   Connection.initialize(context, options.namespaces);
 
-  startJob();
+  startJob({ server: true });
 
   httpServer.listen(options.port);
 }
