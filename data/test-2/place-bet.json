@@ -1,0 +1,47 @@
+{
+  "name": "Place Bet",
+  "server": {
+    "waitForRequest": {
+      "namespace": "/user/sedie",
+      "event": "bet",
+      "payload": {
+        "m": 1,
+        "username": "Conall",
+        "betChoice": "even",
+        "amount": 1,
+        "freeBet": false
+      }
+    },
+    "response": [
+      {
+        "namespace": "/user/sedie",
+        "event": "SeDie",
+        "payload": {
+          "ownBets": {
+            "even": 1
+          },
+          "endBet": 1,
+          "betChoice": "even",
+          "freeBet": false,
+          "user": {
+            "red": 1999,
+            "scoins": 0,
+            "minBet": 1,
+            "maxBet": 3000
+          },
+          "ownChip": {
+            "betChoice": "even",
+            "amount": 1
+          }
+        }
+      }
+    ]
+  },
+  "client": {
+    "delayForAssert": 3000,
+    "delayForAction": 5000,
+    "action": "Integration.click('bet-even')",
+    "actual": "Integration.label('balance')",
+    "expected": "1,999"
+  }
+}
